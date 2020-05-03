@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Tiny</title>
+</head>
+<body>
+<p><b>Original URL</b></p>
+<p>{{.OriginalURL}}</p>
+
+<p><b>Tiny URL</b></p>
+<p id="text1">{{.TinyUrl}}</p>
+<button onclick="copyTextFromElement('text1')">Copy URL</button>
+</body>
+<script>
+    function copyTextFromElement(id) {
+        const text = document.getElementById(id).innerText
+        copy(text)
+    }
+
+    function copy(str) {
+        const el = document.createElement('textarea');
+        el.value = str;
+        document.body.appendChild(el);
+        el.select();
+        document.execCommand('copy');
+        document.body.removeChild(el);
+    }
+</script>
+</html>
