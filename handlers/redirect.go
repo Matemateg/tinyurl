@@ -1,13 +1,11 @@
 package handlers
 
 import (
-	"fmt"
-	"log"
-	"net/http"
 	"github.com/Matemateg/tinyurl/database"
+	"net/http"
 )
 
-type redirectUrl struct{
+type redirectUrl struct {
 	dBase *database.DB
 }
 
@@ -19,13 +17,12 @@ func (rd *redirectUrl) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	tinyUrl := r.URL.Path
 	originalUrl, err := rd.dBase.GetOriginal(tinyUrl)
 	if err == database.ErrNotFound {
-		fmt.Fprint(w, "Url не существует")
+		http.Error(w, "Url не существует", http.StatusInternalServerError)
 		return
 	}
 	if err != nil {
-		fmt.Fprint(w, "Что-то пошло не так")
-		log.Print(err)
+		http.Error(w, "getting url, "+err.Error(), http.StatusInternalServerError)
 		return
 	}
-	http.Redirect(w, r, originalUrl, 302)
+	http.Redirect(w, r, originalUrl, http.StatusFound)
 }

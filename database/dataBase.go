@@ -7,12 +7,12 @@ import (
 
 var ErrNotFound = errors.New("url not found")
 
-type DB struct{
+type DB struct {
 	sqlDB *sql.DB
 }
 
 func New(sqlDb *sql.DB) *DB {
-	return &DB {
+	return &DB{
 		sqlDb,
 	}
 }
