@@ -3,6 +3,13 @@
 This is an application that shortens URLs.  
 Demo on heroku: [neznamovas-tinyurl.herokuapp.com](https://neznamovas-tinyurl.herokuapp.com/)
 
+## Features
+- [x] saving a short url
+- [x] redirecting to original url
+- [x] docker-compose
+- [x] web UI
+- [x] deployed to heroku, [click to open](https://neznamovas-tinyurl.herokuapp.com/)
+
 ## How to run
 - `docker-compose up --build` - launching server on port 9000, database with schema
 - `docker-compose up mysql` - launching only database with schema, but without application, 
