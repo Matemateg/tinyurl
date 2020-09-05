@@ -1,6 +1,7 @@
 package service
 
 import (
+	"errors"
 	"fmt"
 	"github.com/Matemateg/tinyurl/database"
 	"math/rand"
@@ -26,11 +27,24 @@ func (c *createUrl) CreateURL(host string, inputUrl string) (string, error) {
 	}
 
 	const tinyUrlLen = 7
-	tinyUrlPath := fmt.Sprintf("/t/%v", generateRandomString(tinyUrlLen))
+	const limit = 1000 // suppose that's enough to get a unique url
+	var tinyUrlPath string
+	urlCreated := false
+	for i := 0; i < limit; i++ {
+		tinyUrlPath = fmt.Sprintf("/t/%v", generateRandomString(tinyUrlLen))
+		err = c.dBase.Set(originalURL.String(), tinyUrlPath)
+		if err == database.ErrTinyAlreadyExists {
+			continue
+		}
+		if err != nil {
+			return "", fmt.Errorf("setting to db, %w", err)
+		}
+		urlCreated = true
+		break
+	}
 
-	err = c.dBase.Set(originalURL.String(), tinyUrlPath)
-	if err != nil {
-		return "", fmt.Errorf("setting to db, %w", err)
+	if !urlCreated {
+		return "", errors.New("can't create url, please try again or call the support")
 	}
 
 	tinyURL := url.URL{}
